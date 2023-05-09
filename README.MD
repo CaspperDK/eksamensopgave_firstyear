@@ -2,7 +2,7 @@
 # eksamensopgave_firstyear
 Førsteårseksamen Projekt til Intec.
 
-![Figure 1](https://firebasestorage.googleapis.com/v0/b/second-petal-295822.appspot.com/o/images%2Fworkspaces%2FV5Ad1NgJJcGGNRQtrELH%2F5DJecUAAWLgqCpQuZfWBE4wniJm1%2F---figure---q0UccH7ZRA5KV0tDVYr4f---figure---h1i5NLbSfyTVH4m2mZviXw.svg?alt=media&token=77b45871-0e27-4b5c-8606-f144db2b2841 "Figure 1")
+![Figure 1](https://firebasestorage.googleapis.com/v0/b/second-petal-295822.appspot.com/o/images%2Fworkspaces%2FV5Ad1NgJJcGGNRQtrELH%2F5DJecUAAWLgqCpQuZfWBE4wniJm1%2F---figure---CgkWPwxYUKlM1uUg5eQUU---figure---CICPT_LyDkZ0D1fmI4vYzA.svg?alt=media&token=52a857f7-8650-45d1-b36b-0e42b39b1388 "Figure 1")
 
 
 
