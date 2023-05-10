@@ -4,7 +4,7 @@ Firstyear Exam Project for Intec-as.
 
 **Intec-as Logo**
 
-![yJXCoxeYSivFfhIIO6iC.png](https://eraser.imgix.net/workspaces/V5Ad1NgJJcGGNRQtrELH/5DJecUAAWLgqCpQuZfWBE4wniJm1/nHUhAA895nLXfKtY0RR4.png?ixlib=js-3.7.0 "yJXCoxeYSivFfhIIO6iC.png")
+![intec-as_transparentbg.png](https://eraser.imgix.net/workspaces/V5Ad1NgJJcGGNRQtrELH/5DJecUAAWLgqCpQuZfWBE4wniJm1/haVTGTYhqasOyLEkil93.png?ixlib=js-3.7.0 "intec-as_transparentbg.png")
 
 **E/R Diagram - 1.0**
 
