@@ -19,7 +19,7 @@ public class CompanyTest {
     @Test
     void testGetAllCompanyNames() {
         try {
-        // Calling getAllCompanyNames() method and print the result
+        // Calling getAllCompanyNames() method and prints the result
         List<String> actualCompanyNames = companyDAO.getAllCompanyNames();
         System.out.println("Actual company names: " + actualCompanyNames);
 
@@ -37,7 +37,7 @@ public class CompanyTest {
 
     @Test
     void testCorrectCompanyNames() {
-        // Calling getAllCompanyNames() method and print the result
+        // Calling getAllCompanyNames() method and prints the result
         List<String> actualCompanyNames = companyDAO.getAllCompanyNames();
         System.out.println("Actual company names: " + actualCompanyNames);
 

@@ -1,50 +1,65 @@
 package com.eksamen.intec_project;
 
-import com.eksamen.intec_project.MainController.CompanyDAO;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
-
-import static org.junit.Assert.fail;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.util.Map;
 
 @SpringBootTest
-public class CompanyTest {
+public class ArrivalTest {
 
     @Autowired
-    private CompanyDAO companyDAO;
+    private JdbcTemplate jdbcTemplate;
+
+    LocalDateTime startTime = LocalDateTime.parse("2023-06-06T00:00:00");
+    LocalDateTime endTime = LocalDateTime.parse("2023-06-18T00:00:00");
+
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @Test
-    void testGetAllCompanyNames() {
-        try {
-        // Calling getAllCompanyNames() method and print the result
-        List<String> actualCompanyNames = companyDAO.getAllCompanyNames();
-        System.out.println("Actual company names: " + actualCompanyNames);
+    void testChauffeurWithTimeOfArrivalsDK() {
+        String sql = "SELECT chauffeur_name, company, time_of_arrival FROM dk WHERE time_of_arrival >= ? AND time_of_arrival < ?";
+        List<Map<String, Object>> results = jdbcTemplate.queryForList(sql, new Object[]{startTime.format(formatter), endTime.format(formatter)});
 
-        // Asserting expectations.
-        List<String> expectedCompanyNames = List.of("Company A", "Company 333");
-        assertEquals(expectedCompanyNames, actualCompanyNames);
+        System.out.println("Chauffeur names and time of arrival within the specified time-interval:");
+        for (Map<String, Object> row : results) {
+            String chauffeurName = (String) row.get("chauffeur_name");
+            String company = (String) row.get("company");
+            String timeOfArrival = (String) row.get("time_of_arrival");
+            System.out.println("Chauffeur: " + chauffeurName + "(" + company + "), " + "Time of Arrival: " + timeOfArrival);
+        }
+    }
+    @Test
+    void testChauffeurOrTimeOfArrivalDK() {
+        String sql = "SELECT chauffeur_name, company, time_of_arrival FROM dk WHERE time_of_arrival >= ? AND time_of_arrival < ?";
+        List<Map<String, Object>> results = jdbcTemplate.queryForList(sql, new Object[]{startTime.format(formatter), endTime.format(formatter)});
 
-        //Catching the 4000 errors thrown & marks the test as an error.
-        } catch (AssertionError e) {
-            System.err.println("Test failed: " + e.getMessage());
-            fail("Assertion failed."); // Mark the test as an error
+
+        String expectedChauffeurName = "John KnutKnut";
+        String expectedTimeOfArrival = "2023-06-06 22:24:45";
+
+        System.out.println("Chauffeur names and time of arrival within the specified time-interval:");
+        for (Map<String, Object> row : results) {
+            String chauffeurName = (String) row.get("chauffeur_name");
+            String company = (String) row.get("company");
+            String timeOfArrival = (String) row.get("time_of_arrival");
+            System.out.println("Chauffeur: " + chauffeurName + "(" + company + "), " + "Time of Arrival: " + timeOfArrival);
+
+            if (chauffeurName.equals(expectedChauffeurName) || timeOfArrival.equals(expectedTimeOfArrival)) {
+                System.out.println("The expected chauffeur: " + expectedChauffeurName + " at "+ timeOfArrival);
+                Assertions.assertTrue(true);
+                return;
+            }
         }
 
-    }
-
-    @Test
-    void testCorrectCompanyNames() {
-        // Calling getAllCompanyNames() method and print the result
-        List<String> actualCompanyNames = companyDAO.getAllCompanyNames();
-        System.out.println("Actual company names: " + actualCompanyNames);
-
-        // Asserting expectations.
-        List<String> expectedCompanyNames = List.of("GLS", "yallah", "Klud");
-        System.out.println("Your expected Companies: " + expectedCompanyNames);
-        assertEquals(expectedCompanyNames, actualCompanyNames);
+        Assertions.fail("Expected result not found within the specified time-interval");
     }
 }
+
 
