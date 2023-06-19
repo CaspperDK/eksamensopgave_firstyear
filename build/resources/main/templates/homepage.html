@@ -112,6 +112,22 @@
                 }
                 document.getElementById("chauffeur-placeholder").value = "";
                 document.getElementById("company-placeholder").value = "";
+
+                $('#company-placeholder').autocomplete({
+                  source: function(request, response) {
+                    $.ajax({
+                      url: "/companies",
+                      type: "GET",
+                      success: function(data) {
+                        var filteredData = $.grep(data, function(item) {
+                          // Filter the data based on the user's input
+                          return item.toLowerCase().indexOf(request.term.toLowerCase()) !== -1;
+                        });
+                        response(filteredData);
+                      }
+                    });
+                  }
+                });
             });
         });
     </script>
