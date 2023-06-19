@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/styles.css">
+    <script src="//code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <title>Chauffeur Registration Form</title>
+
+    <script>
+        $(document).ready(function() {
+          var timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+          if (timeZone === "America/New_York") {
+                var lang = 'en';
+            } else if (timeZone === "Europe/Copenhagen") {
+                var lang = 'da';
+            }
+          function updateTextContent() {
+            if (lang === 'en') {
+              $('#chauffeur-name').text('Chauffeur Name:');
+              $('#chauffeur-placeholder').attr('placeholder', 'Enter name');
+              $('#company-name').text('Company Name:');
+              $('#company-placeholder').attr('placeholder', 'Enter company');
+              $('#button-submit').text('Submit');
+              $('#title').text('Chauffeur Registration Form');
+              $('#english').text('English');
+              $('#danish').text('Danish');
+            } else if (lang === 'da') {
+              $('#chauffeur-name').text('Chauffør Navn:');
+              $('#chauffeur-placeholder').attr('placeholder', 'Indtast navn');
+              $('#company-name').text('Firma Navn:');
+              $('#company-placeholder').attr('placeholder', 'Indtast firma');
+              $('#button-submit').text('Indsend');
+              $('#title').text('Chauffør Registrerings Skema');
+              $('#english').text('Engelsk');
+              $('#danish').text('Dansk');
+            }
+          }
+          $('#english-button').click(function() {
+            lang = 'en';
+            updateTextContent();
+          });
+          $('#danish-button').click(function() {
+            lang = 'da';
+            updateTextContent();
+          });
+          updateTextContent();
+        });
+    </script>
+    <script>
+      $(document).ready(function() {
+        $.ajax({
+          url: "/companies",
+          type: "GET",
+          success: function(data) {
+            $('#company-placeholder').autocomplete({
+                source: data
+              });
+          }
+        });
+      });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('#button-click-form').submit(function(event) {
+                event.preventDefault();
+                var addCompanyData = {
+                    companyName: $('#company-placeholder').val()
+                };
+                $.ajax({
+                    url: "/add-company",
+                    type: "POST",
+                    data: addCompanyData,
+                    success: function() {
+                        // Handle the success case
+                    },
+                    error: function() {
+                        // Handle the error case
+                    }
+                });
+                var addChauffeurData = {
+                    chauffeur: $('#chauffeur-placeholder').val(),
+                    companyName: $('#company-placeholder').val()
+                };
+                var timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                if (timeZone === "America/New_York") {
+                    $.ajax({
+                        url: "/add-us",
+                        type: "POST",
+                        data: addChauffeurData,
+                        success: function() {
+                            // Handle the success case
+                        },
+                        error: function() {
+                            // Handle the error case
+                        }
+                    });
+                } else if (timeZone === "Europe/Copenhagen") {
+                    $.ajax({
+                        url: "/add-dk",
+                        type: "POST",
+                        data: addChauffeurData,
+                        success: function() {
+                            // Handle the success case
+                        },
+                        error: function() {
+                            // Handle the error case
+                        }
+                    });
+                }
+                document.getElementById("chauffeur-placeholder").value = "";
+                document.getElementById("company-placeholder").value = "";
+
+                $('#company-placeholder').autocomplete({
+                  source: function(request, response) {
+                    $.ajax({
+                      url: "/companies",
+                      type: "GET",
+                      success: function(data) {
+                        var filteredData = $.grep(data, function(item) {
+                          return item.toLowerCase().indexOf(request.term.toLowerCase()) !== -1;
+                        });
+                        response(filteredData);
+                      }
+                    });
+                  }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+<div style="display: flex; align-items: center;">
+    <div style="display: flex; align-items: center;">
+        <button class="circle-btn" id="english-button" type="button">
+            <img src="/images/us-flag.jpg" alt="My Image">
+        </button>
+        <label id="english" style="margin-left: 20px; margin-top: 20px;">English</label>
+        <button class="circle-btn" id="danish-button" type="button">
+            <img src="/images/dk-flag.jpg" alt="My Image">
+        </button>
+        <label id="danish" style="margin-left: 20px; margin-top: 20px;">Dansk</label>
+    </div>
+</div>
+<div class="container">
+    <h1 id="title">Chauffeur Registration Form</h1>
+    <form id="button-click-form">
+        <label for="chauffeur-placeholder" id="chauffeur-name"></label>
+        <input type="text" id="chauffeur-placeholder" name="chauffeur" required>
+        <label for="company-placeholder" id="company-name"></label>
+        <input type="text" id="company-placeholder" name="companyName" autocomplete="off" required>
+        <button type="submit" id="button-submit"></button>
+    </form>
+</div>
+</body>
+</html>
