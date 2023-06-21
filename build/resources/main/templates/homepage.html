@@ -131,9 +131,19 @@
                             });
                         }
                     });
-                    showAndHideAlert('Form submitted successfully!', 'success');
+                    if (timeZone === "America/New_York") {
+                        showAndHideAlert('Form submitted successfully!', 'success');
+                    } else if (timeZone === "Europe/Copenhagen") {
+                        showAndHideAlert('Formen er sendt!', 'success');
+                    }
+
                 } catch (error) {
-                    showAndHideAlert('An error occurred. Please try again.', 'error');
+                    var timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                    if (timeZone === "America/New_York") {
+                        showAndHideAlert('An error occurred. Please try again.', 'error');
+                    } else if (timeZone === "Europe/Copenhagen") {
+                        showAndHideAlert('Der opstod en fejl prøv igen senere.', 'error');
+                    }
                 }
             });
         });
