@@ -78,3 +78,19 @@ button[type="submit"] {
 button[type="submit"]:hover {
     background-color: #0052cc;
 }
+
+.success {
+        background-color: #7ed321;
+        color: #fff;
+}
+
+.error {
+    background-color: #ff0000;
+    color: #fff;
+}
+
+#alert-message {
+    padding: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+}
