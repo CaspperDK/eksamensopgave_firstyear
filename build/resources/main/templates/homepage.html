@@ -63,60 +63,94 @@
       });
     </script>
     <script>
+        function showAndHideAlert(message, type) {
+            $('#alert-message').text(message).removeClass('error success').addClass(type).show();
+            setTimeout(function() {
+                $('#alert-message').fadeOut('slow');
+            }, 3000);
+        }
+
         $(document).ready(function() {
             $('#button-click-form').submit(function(event) {
                 event.preventDefault();
-                var addCompanyData = {
-                    companyName: $('#company-placeholder').val()
-                };
-                $.ajax({
-                    url: "/add-company",
-                    type: "POST",
-                    data: addCompanyData,
-                    success: function() {
-                        // Handle the success case
-                    },
-                    error: function() {
-                        // Handle the error case
+                try {
+                    var addCompanyData = {
+                        companyName: $('#company-placeholder').val()
+                    };
+                    $.ajax({
+                        url: "/add-company",
+                        type: "POST",
+                        data: addCompanyData
+                    });
+
+                    var addChauffeurData = {
+                        chauffeur: $('#chauffeur-placeholder').val(),
+                        companyName: $('#company-placeholder').val()
+                    };
+                    var timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                    if (timeZone === "America/New_York") {
+                        $.ajax({
+                            url: "/add-us",
+                            type: "POST",
+                            data: addChauffeurData,
+                            success: function() {
+                                // Handle the success case
+                            },
+                            error: function() {
+                                // Handle the error case
+                            }
+                        });
+                    } else if (timeZone === "Europe/Copenhagen") {
+                        $.ajax({
+                            url: "/add-dk",
+                            type: "POST",
+                            data: addChauffeurData,
+                            success: function() {
+                                // Handle the success case
+                            },
+                            error: function() {
+                                // Handle the error case
+                            }
+                        });
                     }
-                });
-                var addChauffeurData = {
-                    chauffeur: $('#chauffeur-placeholder').val(),
-                    companyName: $('#company-placeholder').val()
-                };
-                var timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-                if (timeZone === "America/New_York") {
-                    $.ajax({
-                        url: "/add-us",
-                        type: "POST",
-                        data: addChauffeurData,
-                        success: function() {
-                            // Handle the success case
-                        },
-                        error: function() {
-                            // Handle the error case
+
+                    document.getElementById("chauffeur-placeholder").value = "";
+                    document.getElementById("company-placeholder").value = "";
+
+                    $('#company-placeholder').autocomplete({
+                        source: function(request, response) {
+                            $.ajax({
+                                url: "/companies",
+                                type: "GET",
+                                success: function(data) {
+                                    var filteredData = $.grep(data, function(item) {
+                                        return item.toLowerCase().indexOf(request.term.toLowerCase()) !== -1;
+                                    });
+                                    response(filteredData);
+                                }
+                            });
                         }
                     });
-                } else if (timeZone === "Europe/Copenhagen") {
-                    $.ajax({
-                        url: "/add-dk",
-                        type: "POST",
-                        data: addChauffeurData,
-                        success: function() {
-                            // Handle the success case
-                        },
-                        error: function() {
-                            // Handle the error case
-                        }
-                    });
+                    if (timeZone === "America/New_York") {
+                        showAndHideAlert('Form submitted successfully!', 'success');
+                    } else if (timeZone === "Europe/Copenhagen") {
+                        showAndHideAlert('Formen er sendt!', 'success');
+                    }
+
+                } catch (error) {
+                    var timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                    if (timeZone === "America/New_York") {
+                        showAndHideAlert('An error occurred. Please try again.', 'error');
+                    } else if (timeZone === "Europe/Copenhagen") {
+                        showAndHideAlert('Der opstod en fejl prøv igen senere.', 'error');
+                    }
                 }
-                document.getElementById("chauffeur-placeholder").value = "";
-                document.getElementById("company-placeholder").value = "";
             });
         });
     </script>
 </head>
 <body>
+<div id="alert-message" style="display: none;"></div>
 <div style="display: flex; align-items: center;">
     <div style="display: flex; align-items: center;">
         <button class="circle-btn" id="english-button" type="button">
