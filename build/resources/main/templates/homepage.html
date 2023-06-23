@@ -10,12 +10,14 @@
     <title>Chauffeur Registration Form</title>
 
     <script>
+        var lang;
+
         $(document).ready(function() {
           var timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
           if (timeZone === "America/New_York") {
-                var lang = 'en';
+                lang = 'en';
             } else if (timeZone === "Europe/Copenhagen") {
-                var lang = 'da';
+                lang = 'da';
             }
           function updateTextContent() {
             if (lang === 'en') {
@@ -67,7 +69,7 @@
             $('#alert-message').text(message).removeClass('error success').addClass(type).show();
             setTimeout(function() {
                 $('#alert-message').fadeOut('slow');
-            }, 3000);
+            }, 4000);
         }
 
         $(document).ready(function() {
@@ -131,17 +133,16 @@
                             });
                         }
                     });
-                    if (timeZone === "America/New_York") {
+                    if (lang === "en") {
                         showAndHideAlert('Form submitted successfully!', 'success');
-                    } else if (timeZone === "Europe/Copenhagen") {
+                    } else if (lang === "da") {
                         showAndHideAlert('Formen er sendt!', 'success');
                     }
 
                 } catch (error) {
-                    var timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-                    if (timeZone === "America/New_York") {
+                    if (lang === "en") {
                         showAndHideAlert('An error occurred. Please try again.', 'error');
-                    } else if (timeZone === "Europe/Copenhagen") {
+                    } else if (lang === "da") {
                         showAndHideAlert('Der opstod en fejl prøv igen senere.', 'error');
                     }
                 }
